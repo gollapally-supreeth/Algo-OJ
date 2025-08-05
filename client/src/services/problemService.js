@@ -26,9 +26,41 @@ const getProblems = async () => {
   return response.data;
 };
 
+// Delete a problem (Admin only)
+const deleteProblem = async (id) => {
+  const user = getUser();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+  const response = await axios.delete(API_URL + id, config);
+  return response.data;
+};
+// Get a single problem by ID
+const getProblemById = async (id) => {
+  const response = await axios.get(API_URL + id);
+  return response.data;
+};
+
+// Update a problem (Admin only)
+const updateProblem = async (id, problemData) => {
+  const user = getUser();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+  const response = await axios.put(API_URL + id, problemData, config);
+  return response.data;
+};
+
 const problemService = {
   createProblem,
   getProblems,
+  deleteProblem,
+  getProblemById,
+  updateProblem,
 };
 
 export default problemService;
