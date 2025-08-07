@@ -1,86 +1,146 @@
 // filepath: m:\Algo OJ\Algo OJ\client\src\pages\AddProblemPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import problemService from '../services/problemService';
+import './AddProblemPage.css';
 
 const AddProblemPage = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('Two Sum');
+  const [description, setDescription] = useState(
+`Given an array of integers \`nums\` and an integer \`target\`, return indices of the two numbers such that they add up to \`target\`.
+
+You may assume that each input would have **exactly one solution**, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+**Example 1:**
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+
+**Example 2:**
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+
+**Example 3:**
+Input: nums = [3,3], target = 6
+Output: [0,1]
+
+**Constraints:**
+- \`2 <= nums.length <= 10^4\`
+- \`-10^9 <= nums[i] <= 10^9\`
+- \`-10^9 <= target <= 10^9\`
+- Only one valid answer exists.`
+  );
   const [difficulty, setDifficulty] = useState('Easy');
-  const [testCases, setTestCases] = useState([{ input: '', output: '' }]);
+  const [testCases, setTestCases] = useState(JSON.stringify([
+    { "input": "nums = [2,7,11,15], target = 9", "output": "[0,1]" },
+    { "input": "nums = [3,2,4], target = 6", "output": "[1,2]" },
+    { "input": "nums = [3,3], target = 6", "output": "[0,1]" }
+  ], null, 2));
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const isMounted = useRef(true);
 
-  const handleTestCaseChange = (index, event) => {
-    const values = [...testCases];
-    values[index][event.target.name] = event.target.value;
-    setTestCases(values);
-  };
-
-  const handleAddTestCase = () => {
-    setTestCases([...testCases, { input: '', output: '' }]);
-  };
-
-  const handleRemoveTestCase = (index) => {
-    const values = [...testCases];
-    values.splice(index, 1);
-    setTestCases(values);
-  };
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    if (!testCases.trim()) {
+      setError('Test cases cannot be empty.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      await problemService.createProblem({ title, description, difficulty, testCases });
-      navigate('/admin/dashboard'); // Redirect to dashboard after success
+      const parsedTestCases = JSON.parse(testCases);
+      const newProblem = { title, description, difficulty, testCases: parsedTestCases };
+      
+      await problemService.addProblem(newProblem);
+      if (isMounted.current) {
+        navigate('/admin/dashboard');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create problem');
+      if (isMounted.current) {
+        // Provide more specific feedback from the server if available
+        const serverError = err.response?.data?.message;
+        const jsonError = err instanceof SyntaxError ? 'Invalid JSON format in Test Cases.' : '';
+        setError(serverError || jsonError || 'An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   };
 
   return (
-    <div className="container p-4 mx-auto">
-      <h1 className="mb-4 text-2xl font-bold">Add New Problem</h1>
-      {error && <p className="p-2 mb-4 text-white bg-red-500 rounded">{error}</p>}
-      <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow-md">
-        {/* Title, Description, Difficulty fields */}
-        <div className="mb-4">
-          <label className="block mb-1 font-bold">Title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded" required />
+    <div className="form-container">
+      <h1 className="form-title">Add New Problem</h1>
+      <form onSubmit={handleSubmit} className="problem-form">
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-bold">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2 border rounded" rows="5" required></textarea>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            rows="10"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          ></textarea>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-bold">Difficulty</label>
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="w-full p-2 border rounded">
-            <option>Easy</option>
-            <option>Medium</option>
-            <option>Hard</option>
+        <div className="form-group">
+          <label htmlFor="difficulty">Difficulty</label>
+          <select
+            id="difficulty"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
           </select>
         </div>
-
-        {/* Test Cases Section */}
-        <h2 className="mt-6 mb-2 text-xl font-bold">Test Cases</h2>
-        {testCases.map((testCase, index) => (
-          <div key={index} className="p-3 mb-4 border rounded">
-            <h3 className="font-semibold">Test Case {index + 1}</h3>
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div>
-                <label className="block mb-1 font-bold">Input</label>
-                <textarea name="input" value={testCase.input} onChange={e => handleTestCaseChange(index, e)} className="w-full p-2 border rounded" required></textarea>
-              </div>
-              <div>
-                <label className="block mb-1 font-bold">Output</label>
-                <textarea name="output" value={testCase.output} onChange={e => handleTestCaseChange(index, e)} className="w-full p-2 border rounded" required></textarea>
-              </div>
-            </div>
-            <button type="button" onClick={() => handleRemoveTestCase(index)} className="px-3 py-1 mt-2 text-white bg-red-500 rounded">Remove</button>
-          </div>
-        ))}
-        <button type="button" onClick={handleAddTestCase} className="px-3 py-1 mr-4 text-white bg-blue-500 rounded">Add Test Case</button>
-        
-        <button type="submit" className="px-4 py-2 mt-6 font-bold text-white bg-green-600 rounded hover:bg-green-700">Create Problem</button>
+        <div className="form-group">
+          <label htmlFor="testCases">Test Cases (JSON format)</label>
+          <textarea
+            id="testCases"
+            rows="10"
+            value={testCases}
+            onChange={(e) => setTestCases(e.target.value)}
+            required
+          ></textarea>
+          <p className="json-hint">
+            Provide an array of objects in JSON format.
+          </p>
+        </div>
+        {error && <p className="error-text">{error}</p>}
+        <div className="form-actions">
+          <button type="button" onClick={() => navigate(-1)} className="btn btn-cancel">
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-submit" disabled={loading}>
+            {loading ? 'Adding...' : 'Add Problem'}
+          </button>
+        </div>
       </form>
     </div>
   );

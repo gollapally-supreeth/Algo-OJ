@@ -1,0 +1,116 @@
+.dashboard-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #f9fafb;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-add {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #16a34a;
+}
+
+.dashboard-content {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.content-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.loading-text, .error-text {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+}
+
+.error-text {
+  color: #ef4444;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.problems-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.problems-table th, .problems-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.problems-table th {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.problems-table td {
+  vertical-align: middle;
+}
+
+.difficulty-badge {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.difficulty-easy { background-color: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.difficulty-medium { background-color: rgba(234, 179, 8, 0.2); color: #facc15; }
+.difficulty-hard { background-color: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons .btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.btn-view { background-color: #3b82f6; color: white; }
+.btn-view:hover { background-color: #2563eb; }
+
+.btn-edit { background-color: #eab308; color: white; }
+.btn-edit:hover { background-color: #ca8a04; }
+
+.btn-delete { background-color: #ef4444; color: white; }
+.btn-delete:hover { background-color: #dc2626; }

@@ -1,62 +1,119 @@
 .home-container {
   display: flex;
+  flex-direction: column; /* Stack content vertically */
   justify-content: center;
   align-items: center;
-  height: 100%;
+  flex: 1; /* This makes the container grow to fill the available space in .main */
   text-align: center;
+  padding: 20px;
 }
 
-.welcome-box {
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+/* Removed background styles from .home-container */
+
+/* Removed .hero-content style block */
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #f9fafb; /* Lighter color for dark background */
+  margin: 0 0 20px 0;
 }
 
-.welcome-title {
-  margin-top: 0;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem; /* Adjust as needed */
+/* This is for the SplitText component's parent */
+.split-parent {
+  display: block !important;
 }
 
-.welcome-box h2 {
-  margin-top: 0;
-  font-size: 2.5rem;
-}
-
-.welcome-box p {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 30px;
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #d1d5db; /* Lighter color for dark background */
+  margin-bottom: 40px;
+  font-weight: 400;
+  opacity: 0; /* Initial state for animation */
 }
 
 .auth-buttons .btn {
-  padding: 12px 24px;
+  padding: 15px 35px;
   margin: 0 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: bold;
+  border: 1px solid transparent; /* Changed from no border */
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   text-transform: uppercase;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  opacity: 0; /* Initial state for animation */
+}
+
+.auth-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary {
-  background-color: #007BFF;
+  background-color: #4f46e5;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #4338ca;
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f9fafb;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  background-color: #5a6268;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #d1d5db; /* Lighter color for dark background */
+  margin-bottom: 40px;
+  font-weight: 400;
+  opacity: 0; /* Initial state for animation */
+}
+
+.auth-buttons .btn {
+  padding: 15px 35px;
+  margin: 0 10px;
+  border: 1px solid transparent; /* Changed from no border */
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  opacity: 0; /* Initial state for animation */
+}
+
+.auth-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f9fafb;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
